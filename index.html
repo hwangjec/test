@@ -1423,7 +1423,7 @@ function clearSearch() {
         // 初始化菜单
         async function initMenu() {
             try {
-                const response = await fetch('data.json');
+                const response = await fetch('formatted_matches.json');
                 data = await response.json();
                 const navContainer = document.getElementById('navTreeContainer');
                 createMenu(navContainer, data); // 创建菜单树
