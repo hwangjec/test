@@ -726,13 +726,14 @@
                         } else { // 收回时恢复内容
                             contentDiv.innerHTML = originalContent;
                             // 重新绑定留言板事件
-                            document.getElementById('submitBtn').onclick = submitMessage;
-                            document.getElementById('messageInput').onkeydown = function(e) {
-                                if (e.key === 'Enter' && !e.shiftKey) {
-                                    e.preventDefault();
-                                    submitMessage();
-                                }
-                            };
+                            loadHomeContent();
+                            // document.getElementById('submitBtn').onclick = submitMessage;
+                            // document.getElementById('messageInput').onkeydown = function(e) {
+                            //     if (e.key === 'Enter' && !e.shiftKey) {
+                            //         e.preventDefault();
+                            //         submitMessage();
+                            //     }
+                            // };
                         }
                     }
                     
@@ -1089,13 +1090,33 @@ function clearSearch() {
                 </div>
             `;
             // 重新绑定留言板事件
-            document.getElementById('submitBtn').onclick = submitMessage;
-            document.getElementById('messageInput').onkeydown = function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
+            contentDiv.addEventListener('click', (e) => {
+                if (e.target && e.target.id === 'submitBtn') {
                     submitMessage();
                 }
-            };
+            });
+        
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput) {
+                messageInput.onkeydown = function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        submitMessage();
+                    }
+                };
+            }
+            // document.getElementById('submitBtn').onclick = submitMessage;
+            // contentDiv.addEventListener('click', (e) => {
+            //     if (e.target && e.target.id === 'submitBtn') {
+            //         submitMessage();
+            //     }
+            // });
+            // document.getElementById('messageInput').onkeydown = function(e) {
+            //     if (e.key === 'Enter' && !e.shiftKey) {
+            //         e.preventDefault();
+            //         submitMessage();
+            //     }
+            // };
             currentSearchKeyword = null;
         }
 
