@@ -996,6 +996,8 @@
 function clearSearch() {
     currentSearchKeyword = null;
     document.querySelector('.search-input').value = '';
+    currentPath = ['当前页:首页']; // 强制重置路径
+    syncMenuState(0);
     loadHomeContent();
     updateBreadcrumb();
 }
