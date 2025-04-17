@@ -1532,8 +1532,82 @@ function clearSearch() {
             } else if (searchType === 'player') {
                 const results = searchByPlayer(keyword);
                 displaySearchResults(results, 'player');
+            } else if (searchType === 'medal') {
+                const results = searchByMedal(keyword);
+                displaySearchResults(results, 'medal');
             }
             updateBreadcrumb();
+        }
+
+
+        function searchByMedal(keyword) {
+            const normalizedKeyword = keyword.replace(/[牌军]/g, '').trim(); // 统一关键词格式
+            const searchTerms = [];
+            
+            // 建立奖牌映射关系
+            const medalMap = {
+                '冠': ['冠军'],
+                '亚': ['亚军'],
+                '铜': ['铜牌', '季军'],
+                '季': ['铜牌', '季军'],
+                'gold': ['冠军'],       // 支持英文
+                'silver': ['亚军'],
+                'bronze': ['铜牌', '季军']
+            };
+
+            // 处理搜索词
+            if (medalMap[normalizedKeyword]) {
+                searchTerms.push(...medalMap[normalizedKeyword]);
+            } else {
+                // 兼容全称搜索
+                const fullNameMap = {
+                    '冠军': ['冠军'],
+                    '亚军': ['亚军'],
+                    '铜牌': ['铜牌', '季军'],
+                    '季军': ['铜牌', '季军']
+                };
+                searchTerms.push(...(fullNameMap[keyword] || [keyword]));
+            }
+
+            const results = [];
+            Object.entries(data).forEach(([category, years]) => {
+                Object.entries(years).forEach(([year, matches]) => {
+                    matches.forEach(match => {
+                        const matchName = Object.keys(match.比赛名称)[0];
+                        const matchData = match.比赛名称[matchName];
+                        
+                        matchData.性质?.forEach(propertyObj => {
+                            Object.entries(propertyObj).forEach(([propName, records]) => {
+                                const medalRecords = records.filter(record => {
+                                    // 安全访问头衔字段
+                                    const title = record.头衔?.trim() || '';
+                                    return searchTerms.some(term => 
+                                        title.includes(term)
+                                    );
+                                });
+                                
+                                if (medalRecords.length > 0) {
+                                    // 去重处理
+                                    const existing = results.find(r => 
+                                        r.matchName === matchName && 
+                                        r.property === propName
+                                    );
+                                    if (!existing) {
+                                        results.push({
+                                            category,
+                                            year,
+                                            matchName,
+                                            property: propName,
+                                            medals: [...new Set(medalRecords.map(r => r.头衔))]
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                    });
+                });
+            });
+            return results;
         }
 
         function searchMatches(keyword) {
@@ -1693,6 +1767,46 @@ function clearSearch() {
 
                     container.appendChild(card);
                 });
+            } else if (searchType === 'medal') {
+                const container = document.createElement('div');
+                container.className = 'match-list';
+                
+                results.forEach(result => {
+                    const card = document.createElement('div');
+                    card.className = 'nav-item level-2';
+                    card.style.cssText = `margin:10px;padding:15px;background:rgba(95,158,160,0.1);border-radius:8px;`;
+
+                    card.innerHTML = `
+                        <div style="width:100%">
+                            <div style="display:flex;justify-content:space-between">
+                                <span style="color:#2F4F4F">${result.matchName}</span>
+                                <span style="font-size:12px;color:#666">
+                                    ${result.year}｜${result.category}
+                                </span>
+                            </div>
+                            <div style="margin-top:10px;color:#5F9EA0">
+                                🏅 ${result.medals.join('、')}
+                            </div>
+                        </div>
+                    `;
+
+                    card.addEventListener('click', () => {
+                        currentPath = [
+                            '当前页:首页',
+                            result.category,
+                            result.year,
+                            result.matchName,
+                            result.property
+                        ];
+                        syncMenuState(4);
+                        updateBreadcrumb();
+                        loadContentByPath();
+                    });
+
+                    container.appendChild(card);
+                });
+                contentDiv.appendChild(container);
+                return;
             }
 
 
