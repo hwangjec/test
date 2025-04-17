@@ -1272,6 +1272,10 @@ function clearSearch() {
                 头衔: new Set(),
                 团体: new Set()
             };
+            const iconMap = {
+                '头衔': '🎖️',  // 奖章图标
+                '搭档': '🤝'  // 握手图标
+            };
 
             const isSpecialLeague = ['T联赛','中国联赛','欧洲乒乓球冠军联赛'].includes(category);
 
@@ -1304,7 +1308,7 @@ function clearSearch() {
                 if(set.size > 0) {
                     infoElements.push(`
                         <span class="info-item">
-                            <span class="label">${key}</span>
+                            <span class="label">${iconMap[key]}</span>
                             <span class="value">${Array.from(set).join('、')}</span>
                         </span>
                     `);
