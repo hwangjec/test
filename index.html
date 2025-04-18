@@ -1791,7 +1791,6 @@
                         matchData.性质?.forEach(propertyObj => {
                             Object.entries(propertyObj).forEach(([propName, records]) => {
                                 const medalRecords = records.filter(record => {
-                                    // 安全访问头衔字段
                                     const title = record.头衔?.trim() || '';
                                     return searchTerms.some(term => 
                                         title.includes(term)
@@ -1799,19 +1798,29 @@
                                 });
                                 
                                 if (medalRecords.length > 0) {
-                                    // 去重处理
+                                    // 修改去重逻辑：增加category/year/propName作为判断条件
                                     const existing = results.find(r => 
-                                        r.matchName === matchName && 
-                                        r.property === propName
+                                        r.matchName === matchName &&
+                                        r.property === propName && 
+                                        r.category === category &&  // 新增类别判断
+                                        r.year === year              // 新增年份判断
                                     );
+                                    
                                     if (!existing) {
                                         results.push({
                                             category,
                                             year,
                                             matchName,
                                             property: propName,
+                                            // 合并同一性质下的多个奖牌
                                             medals: [...new Set(medalRecords.map(r => r.头衔))]
                                         });
+                                    } else {
+                                        // 合并同一性质下的不同奖牌（如单场赛事同一性质多个奖牌）
+                                        existing.medals = [
+                                            ...new Set([...existing.medals, 
+                                            ...medalRecords.map(r => r.头衔)])
+                                        ];
                                     }
                                 }
                             });
