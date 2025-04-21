@@ -1421,7 +1421,7 @@
                                         cursor: pointer;"
                                  onclick="handlePathNavigation('${category}', '${year}', '${matchName}')">
                                 ${matchName}
-                                <span style="font-size:14px;color:#5F9EA0;margin-left:10px;">
+                                <span style=";margin-left:10px;">
                                     共包含 ${propertyCount} 个项目
                                 </span>
                             </div>
@@ -1470,7 +1470,7 @@
 
                     // 创建项目卡片
                     const card = document.createElement('div');
-                    card.className = 'nav-item level-2';
+                    card.className = 'nav-item level-4';
                     card.style.cssText = `
                         margin: 10px;
                         padding: 15px;
@@ -2031,7 +2031,7 @@
                             ${result.year} | ${result.category}
                         </div>
                     </div>
-                    <span style="font-size:14px;color:#5F9EA0">
+                    <span style="">
                         包含 ${propertyCount} 个项目
                     </span>
                 `;
@@ -2155,7 +2155,7 @@
                                 ${result.year} | ${result.category}
                             </div>
                         </div>
-                        <span style="font-size:14px;color:#5F9EA0">
+                        <span style="">
                             包含 ${result.propertyCount} 个项目
                         </span>
                     `;
