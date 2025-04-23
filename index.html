@@ -867,6 +867,70 @@
             font-weight: 500;
         }
 
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(95,158,160,0.05);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .info-item .icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .info-content .label {
+            color: #5F9EA0;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        .info-content .value {
+            color: #2F4F4F;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        /* 成就展示 */
+        .achievement-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(95,158,160,0.05);
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .achievement-item:hover {
+            transform: translateX(10px);
+        }
+
+        .achievement-item .medal {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .achievement-item h4 {
+            color: #5F9EA0;
+            margin: 0 0 5px 0;
+        }
+
+        .achievement-item p {
+            color: #2F4F4F;
+            margin: 0;
+            font-size: 0.9em;
+        }
+
 
     </style>
 
@@ -1546,6 +1610,137 @@
             });
             ctx.closePath();
             ctx.stroke();
+        }
+
+        function loadPlayerProfile() {
+            const contentDiv = document.querySelector('.content');
+            const bannerSpan = document.querySelector('.banner span');
+            bannerSpan.innerHTML = '<b>当前页:</b> <b>关于选手</b>';
+            
+            contentDiv.innerHTML = `
+                <div class="player-profile">
+                    <!-- 基本资料卡片 -->
+                    <div class="profile-card basic-info">
+                        <div class="card-header">
+                            <h2>林昀儒 (Lin Yun-Ju)</h2>
+                            <div class="national-flag">🇨🇳 中国台北</div>
+                        </div>
+                        <div class="info-grid">
+                            ${generateBasicInfoItems()}
+                        </div>
+                    </div>
+
+                    <!-- 成长历程 -->
+                    <div class="profile-card timeline">
+                        <h3>📈 成长轨迹</h3>
+                        <div class="timeline-container">
+                            ${generateGrowthTimeline()}
+                        </div>
+                    </div>
+
+                    <!-- 技术特征 -->
+                    <div class="profile-card tech-stats">
+                        <h3>🎯 技术特征</h3>
+                        <div class="tech-grid">
+                            ${generateTechFeatures()}
+                        </div>
+                    </div>
+
+                    
+                    
+            `;
+        }
+
+        function generateBasicInfoItems() {
+            const infoData = [
+                { icon: '🎂', label: '出生日期', value: '2001年8月17日' },
+                { icon: '📍', label: '出生地', value: '中国台湾省宜兰县' },
+                { icon: '📏', label: '身高', value: '175cm' },
+                { icon: '🤚', label: '持拍方式', value: '左手横拍两面反胶' },
+                { icon: '👨👩👦', label: '家庭背景', value: '父亲林育正（业余选手）/母亲陈贵玲（教师）' },
+                { icon: '🏫', label: '专业训练', value: '13岁进入台北市立大学竞技系' }
+            ];
+
+            return infoData.map(item => `
+                <div class="info-item">
+                    <span class="icon">${item.icon}</span>
+                    <div class="info-content">
+                        <div class="label">${item.label}</div>
+                        <div class="value">${item.value}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateGrowthTimeline() {
+            const timelineData = [
+                { year: '2008', event: '7岁开始系统训练', icon: '🏓' },
+                { year: '2014', event: '进入台北市立大学接受綦戈指导', icon: '🎓' },
+                { year: '2019', event: '捷克公开赛/T2钻石赛夺冠', icon: '💥' },
+                { year: '2021', event: '东京奥运会混双铜牌/男单第四', icon: '🇯🇵' },
+                { year: '2023', event: 'WTT常规挑战赛阿拉木图站', icon: '🏅' }
+            ];
+
+            return timelineData.map(item => `
+                <div class="timeline-item">
+                    <div class="timeline-marker">${item.icon}</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">${item.year}</div>
+                        <div class="timeline-event">${item.event}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateTechFeatures() {
+            return `
+                <div class="tech-item">
+                    <div class="tech-content">
+                        <h4>沉默杀手</h4>
+                        <p>标志性扑克脸，赛局中保持高度专注，心理素质评级：SS级</p>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🔄</div>
+                    <div class="tech-content">
+                        <h4>技术融合</h4>
+                        <p>结合亚洲细腻台控（摆短成功率68%）+欧洲先进相持理念（反手快撕速度4.2次/秒）</p>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🎓</div>
+                    <div class="tech-content">
+                        <h4>训练体系</h4>
+                        <p>独创"学业+训练"双轨模式，每日保持3小时文化课学习</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateAchievements() {
+            return `
+                <div class="achievement-item">
+                    <div class="medal">🥉</div>
+                    <div class="content">
+                        <h4>奥运荣耀</h4>
+                        <p>2021东京奥运会混双铜牌（搭档郑怡静）</p>
+                    </div>
+                </div>
+                <div class="achievement-item">
+                    <div class="medal">🏆</div>
+                    <div class="content">
+                        <h4>突破纪录</h4>
+                        <p>2019年T2钻石赛最年轻冠军（18岁）</p>
+                    </div>
+                </div>
+                <div class="achievement-item">
+                    <div class="medal">📈</div>
+                    <div class="content">
+                        <h4>排名成就</h4>
+                        <p>2023年世界排名长期稳居TOP10</p>
+                    </div>
+                </div>
+            `;
         }
 
         function navigateToMatch(category, year, matchName, property) {
