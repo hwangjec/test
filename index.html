@@ -1460,6 +1460,7 @@
                 }
             `;
             document.head.appendChild(style);
+            document.querySelector('.content').scrollTop = 0;
         }
 
         function getCardColor(type) {
@@ -1486,6 +1487,7 @@
                 </div>
             `;
             drawRadarChart();
+            document.querySelector('.content').scrollTop = 0;
         }
 
         function getAnalysisText() {
@@ -1645,10 +1647,8 @@
                             ${generateTechFeatures()}
                         </div>
                     </div>
-
-                    
-                    
             `;
+            document.querySelector('.content').scrollTop = 0;
         }
 
         function generateBasicInfoItems() {
